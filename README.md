@@ -19,8 +19,14 @@
 ## Architecture Overview
 
 [![Watch the architecture explanation video](assets/img2.png)](https://www.youtube.com/watch?v=5aftMJ3UpKo&list=PLTkDyGbgSTQpe0X5DKmxNjy7mdX78kTo4)
-The project follows a modular pipeline architecture where each component handles a specific stage of content generation. The system leverages Google's Gemini API for all AI operations including vision, language generation, image synthesis, and text-to-speech.
 
+<p align="center">
+  <strong><a href="https://www.youtube.com/watch?v=5aftMJ3UpKo&list=PLTkDyGbgSTQpe0X5DKmxNjy7mdX78kTo4">
+    Click here to watch the full demo video
+  </a></strong>
+</p>
+
+The project follows a modular pipeline architecture where each component handles a specific stage of content generation. The system leverages Google's Gemini API for all AI operations including vision, language generation, image synthesis, and text-to-speech.
 ### Core Components
 
 **agent/digital_notes_json_genrator.py**
