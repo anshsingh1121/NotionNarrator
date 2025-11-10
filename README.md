@@ -1,17 +1,24 @@
 # NotionNarrator Documentation
 
-## Project Overview
+<div style="width: 100%;">
 
-![NotionNarrator transforms handwritten notes into AI-powered digital content](image.png)
+  <h2 style="font-size: 24px; font-weight: 600;">Project Overview</h2>
 
-NotionNarrator is an AI-powered documentation generator that transforms handwritten or typed notes from images into structured educational content. The system operates in two distinct modes:
+  <img src="assets/img1.png" 
+       alt="NotionNarrator transforms handwritten notes into AI-powered digital content" 
+       style="max-width: 820px; height: auto; display: block; margin-bottom: 15px;">
 
-1. **Documentation Generation Mode**: Converts note images into formatted Markdown documents with AI-generated illustrations
-2. **Video Generation Mode**: Creates educational video slideshows with AI-generated images and narration
+  <p style="font-size: 16px; line-height: 1.5;">
+    NotionNarrator is an AI-powered documentation generator that transforms 
+    handwritten or typed notes from images into structured educational 
+    content. The system operates in two distinct modes:
+  </p>
+
+</div>
 
 ## Architecture Overview
 
-[![Watch the architecture explanation video](image (1).png)](https://www.youtube.com/watch?v=5aftMJ3UpKo&list=PLTkDyGbgSTQpe0X5DKmxNjy7mdX78kTo4)
+[![Watch the architecture explanation video](assets\img2.png)](https://www.youtube.com/watch?v=5aftMJ3UpKo&list=PLTkDyGbgSTQpe0X5DKmxNjy7mdX78kTo4)
 
 The project follows a modular pipeline architecture where each component handles a specific stage of content generation. The system leverages Google's Gemini API for all AI operations including vision, language generation, image synthesis, and text-to-speech.
 
