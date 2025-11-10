@@ -1,5 +1,4 @@
 # NotionNarrator Documentation
-
 <div style="width: 100%;">
 
   <h2 style="font-size: 24px; font-weight: 600;">Project Overview</h2>
@@ -18,8 +17,7 @@
 
 ## Architecture Overview
 
-[![Watch the architecture explanation video](assets\img2.png)](https://www.youtube.com/watch?v=5aftMJ3UpKo&list=PLTkDyGbgSTQpe0X5DKmxNjy7mdX78kTo4)
-
+[![Watch the architecture explanation video](assets/img2.png)](https://www.youtube.com/watch?v=5aftMJ3UpKo&list=PLTkDyGbgSTQpe0X5DKmxNjy7mdX78kTo4)
 The project follows a modular pipeline architecture where each component handles a specific stage of content generation. The system leverages Google's Gemini API for all AI operations including vision, language generation, image synthesis, and text-to-speech.
 
 ### Core Components
