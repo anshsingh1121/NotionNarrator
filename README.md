@@ -1,251 +1,232 @@
-<<<<<<< HEAD
-# Notes Agent - Image to Markdown Documentation Generator
+# NotionNarrator Documentation
 
-This project automatically converts handwritten or typed notes from images into well-formatted Markdown documentation with AI-generated illustrations.
+## Project Overview
 
-## Features
+![NotionNarrator transforms handwritten notes into AI-powered digital content](image.png)
 
-- 📝 **Automatic Transcription**: Converts image notes to structured Markdown
-- 🎨 **Image Generation**: Creates diagrams and illustrations from descriptions
-- 🎬 **Video Generation**: Creates educational slideshow videos with AI-generated images and narration
-- 🔊 **Voice Generation**: Generates natural-sounding narration from text
-- 📚 **Batch Processing**: Processes multiple images automatically
-- 🗂️ **Organized Output**: Creates separate markdown files with embedded images
+NotionNarrator is an AI-powered documentation generator that transforms handwritten or typed notes from images into structured educational content. The system operates in two distinct modes:
 
-## Prerequisites
+1. **Documentation Generation Mode**: Converts note images into formatted Markdown documents with AI-generated illustrations
+2. **Video Generation Mode**: Creates educational video slideshows with AI-generated images and narration
 
-1. Python 3.13+ (or compatible version)
-2. Google Gemini API Key
+## Architecture Overview
 
-## Installation
+[![Watch the architecture explanation video](image (1).png)](https://www.youtube.com/watch?v=5aftMJ3UpKo&list=PLTkDyGbgSTQpe0X5DKmxNjy7mdX78kTo4)
 
-1. Clone this repository
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+The project follows a modular pipeline architecture where each component handles a specific stage of content generation. The system leverages Google's Gemini API for all AI operations including vision, language generation, image synthesis, and text-to-speech.
 
-Or manually:
-```bash
-pip install google-genai python-dotenv moviepy pillow
-```
+### Core Components
 
-3. Set up your Gemini API key:
-```bash
-# Windows PowerShell
-$env:GEMINI_API_KEY="your-api-key-here"
+**agent/digital_notes_json_genrator.py**
+- Primary vision-to-text conversion module
+- Uses Gemini 2.5 Pro with extended thinking budget (30,000 tokens)
+- Analyzes note images and extracts structured information
+- Outputs JSON containing markdown-formatted descriptions and image generation prompts
+- Implements strict JSON schema validation for consistent output structure
 
-# Linux/Mac
-export GEMINI_API_KEY="your-api-key-here"
-```
+**agent/notes_degitalizer.py**
+- Folder-level orchestration for documentation generation
+- Processes multiple images per folder and combines results
+- Aggregates descriptions and image prompts into unified JSON files
+- Maintains folder hierarchy in output structure
 
-Or create a `.env` file:
-```
-GEMINI_API_KEY=your-api-key-here
-```
+**agent/explentory_json_genrator.py**
+- Content enhancement and narrative generation
+- Uses Gemini 2.5 Pro with extended thinking budget (32,768 tokens)
+- Transforms fragmented technical notes into cohesive educational scripts
+- Implements Veritasium-style narrative structure for engaging content
+- Converts basic image prompts into detailed, production-ready descriptions
+- Outputs sections array with paired image descriptions and narration content
 
-## Usage
+**agent/create_image.py**
+- Image synthesis module
+- Uses Gemini 2.5 Flash Image model for visual generation
+- Converts text descriptions into educational diagrams and illustrations
+- Supports streaming generation for efficient processing
+- Handles binary file operations for image storage
 
-### 1. Generate Video from JSON
+**agent/voice_genrator.py**
+- Text-to-speech conversion module
+- Uses Gemini 2.5 Flash Preview TTS with Kore voice configuration
+- Generates natural-sounding educational narration
+- Handles audio format conversion to WAV
+- Implements MIME type parsing and WAV header generation
 
-The video generator creates educational videos from your JSON output files with AI-generated images and narration.
+**agent/video_genrator.py**
+- Video assembly and rendering pipeline
+- Orchestrates parallel generation of images and audio
+- Uses ThreadPoolExecutor for concurrent asset generation
+- Leverages MoviePy for video composition
+- Creates synchronized slideshows with H.264 video and AAC audio encoding
+- Implements asset caching to avoid redundant generation
 
-**Process all VLSI folders:**
-```bash
-python agent/video_genrator.py
-```
+## Processing Workflows
 
-**Process a specific folder:**
-```bash
-python agent/video_genrator.py vlsi/1
-```
+### Documentation Generation Pipeline
 
-This will:
-1. Read the `output_*.json` file from each folder
-2. Generate images for each section based on `image_description`
-3. Generate audio narration for each section based on `content`
-4. Create a video slideshow (`{folder_name}_video.mp4`) combining images and audio
+1. Image ingestion from folder structure
+2. Vision analysis using Gemini 2.5 Pro
+3. JSON extraction with markdown content and image prompts
+4. Aggregation of multi-image folder content
+5. Optional image generation from prompts
+6. Markdown file assembly with embedded references
 
-### 2. Process All Images
+### Video Generation Pipeline
 
-Place your note images in the `bmsp/files/` directory, then run:
+1. JSON input containing sections with image descriptions and narration text
+2. Parallel asset generation:
+   - Image synthesis from enhanced descriptions
+   - Audio generation from narration content
+3. Asset validation and caching
+4. Video clip creation with synchronized audio
+5. Clip concatenation and final video rendering
+6. Export with optimized encoding settings
 
-```bash
-cd agent
-python orchestraor.py
-```
+## AI Models and Configuration
 
-### Output Structure
+**Vision and Language Processing**
+- Model: Gemini 2.5 Pro
+- Configuration: Extended thinking budgets for complex reasoning
+- Response format: Structured JSON with schema validation
+- Temperature: Default for consistent outputs
 
-**For markdown generation:**
-```
-bmsp/
-├── files/          # Input images
-│   ├── 0.png
-│   ├── 1.png
-│   └── ...
-├── images/         # Generated images
-│   ├── 0/
-│   │   ├── image_1.png
-│   │   └── image_2.png
-│   └── 1/
-│       └── image_1.png
-├── 0.md           # Generated markdown
-├── 1.md
-└── ...
-```
+**Image Generation**
+- Model: Gemini 2.5 Flash Image
+- Output: PNG format with streaming delivery
+- Style: Educational infographic and technical illustration
+- Modalities: Image and text generation
 
-**For video generation:**
+**Text-to-Speech**
+- Model: Gemini 2.5 Flash Preview TTS
+- Voice: Kore (prebuilt voice configuration)
+- Temperature: 1.0 for natural variation
+- Format: PCM audio converted to WAV
+
+## Data Flow and Output Structure
+
+### Documentation Mode Output
 ```
 vlsi/
 ├── 1/
-│   ├── output_1.json       # Input JSON with sections
-│   ├── section_0.png       # Generated image for section 0
-│   ├── section_0.wav       # Generated audio for section 0
-│   ├── section_1.png       # Generated image for section 1
-│   ├── section_1.wav       # Generated audio for section 1
-│   └── 1_video.mp4         # Final video output
+│   ├── 1.json                  # Combined input descriptions and prompts
+│   ├── 1.png                   # Source note image
+│   └── 2.png                   # Additional source images
 ├── 2/
-│   └── ...
+│   └── 2.json
 └── ...
 ```
 
-Each markdown file contains:
-- Formatted, explanatory notes
-- Technical definitions and context
-- Image references at the bottom
-
-### Example Output
-
-For an input image of circuit notes, you'll get:
-
-**`bmsp/0.md`**:
-```markdown
-# BJT Common Emitter Amplifier
-
-The Common Emitter (CE) amplifier is one of the three basic...
-
-## Circuit Configuration
-...
-
----
-
-## Generated Images
-
-![Generated Image 1](images/0/image_1.png)
+JSON structure for documentation:
+```json
+{
+  "folder": "1",
+  "total_images": 2,
+  "processed_images": 2,
+  "descriptions": [
+    {
+      "image": "1.png",
+      "description": "# Markdown formatted content..."
+    }
+  ],
+  "image_prompts": [
+    "Detailed image generation prompt..."
+  ]
+}
 ```
 
-## Project Structure
-
+### Video Mode Output
 ```
-Notes_Agent/
-├── agent/
-│   ├── orchestraor.py              # Main orchestrator
-│   ├── json_genrator.py            # JSON generation from images
-│   ├── create_image.py             # Image generation from prompts
-│   ├── voice_genrator.py           # Voice/audio generation from text
-│   └── video_genrator.py           # Video slideshow generator (NEW!)
-├── bmsp/
-│   ├── files/                      # Input images directory
-│   ├── images/                     # Generated images (created automatically)
-│   └── *.md                       # Generated markdown files
-├── vlsi/
-│   ├── 1/                          # Topic folders
-│   │   ├── output_1.json          # Structured content
-│   │   ├── section_*.png          # Generated images
-│   │   ├── section_*.wav          # Generated audio
-│   │   └── 1_video.mp4            # Final video
-│   └── ...
-├── requirements.txt
-└── README.md
+vlsi/video/
+├── 1.json                      # Input script with sections
+├── output_1/
+│   ├── images/
+│   │   ├── section_0.png      # Generated section images
+│   │   └── section_1.png
+│   ├── audio/
+│   │   ├── section_0.wav      # Generated narration audio
+│   │   └── section_1.wav
+│   └── final_video.mp4        # Rendered video output
+├── 2.json
+├── output_2/
+│   └── final_video.mp4
+└── ...
 ```
 
-## How It Works
-
-### Markdown Documentation Generation
-1. **Image Analysis**: Uses Gemini 2.5 Pro to analyze note images
-2. **JSON Generation**: Extracts description and image prompts as structured JSON
-3. **Content Enhancement**: Adds explanations, definitions, and context
-4. **Image Creation**: Uses Gemini Flash Image to generate diagrams
-5. **Markdown Assembly**: Creates formatted documentation with embedded images
-
-### Video Generation Pipeline
-1. **JSON Parsing**: Reads `output_*.json` files with sections
-2. **Image Generation**: For each section, generates an image from `image_description` using Gemini 2.5 Flash Image
-3. **Audio Generation**: Creates narration from `content` using Gemini 2.5 Pro TTS with natural voice
-4. **Video Assembly**: Combines images and audio into a seamless slideshow with MoviePy
-   - Each section's duration matches its audio length
-   - Smooth transitions between sections
-   - High-quality video output (H.264, AAC audio)
-
-## JSON Structure for Video Generation
-
-The `output_*.json` files should follow this structure:
-
+JSON structure for video generation:
 ```json
 {
   "sections": [
     {
-      "image_description": "A cinematic shot of a microprocessor...",
-      "content": "The narration text that will be converted to speech..."
-    },
-    {
-      "image_description": "An animated diagram showing...",
-      "content": "More narration text..."
+      "image_description": "Detailed prompt for image generation with style, composition, labels",
+      "content": "Narration script in conversational, educational tone"
     }
   ]
 }
 ```
 
-## API Usage
+## Performance Optimizations
 
-### Video Generation API
+**Parallel Processing**
+- Concurrent image and audio generation per section
+- Configurable worker pools for multi-video processing
+- ThreadPoolExecutor for I/O-bound operations
 
-```python
-from agent.video_genrator import process_json_folder
+**Asset Caching**
+- Checks for existing images and audio before generation
+- Prevents redundant API calls and processing
+- Maintains generated assets for incremental updates
 
-# Process a single folder
-process_json_folder("vlsi/1")
-```
+**Streaming Operations**
+- Chunked response handling for image generation
+- Efficient memory usage for large binary data
+- Progressive file writing for immediate availability
 
-### Markdown Generation API
+## System Requirements
 
-```python
-from agent.orchestraor import process_image, process_all_images
+**Python Environment**
+- Python 3.13 or compatible version
+- Core dependencies: google-genai, python-dotenv, moviepy, pillow
 
-# Process a single image
-result = process_image("bmsp/files/0.png")
+**API Configuration**
+- Google Gemini API key required
+- Set via environment variable: GEMINI_API_KEY
+- Alternative: .env file in project root
 
-# Process all images in a directory
-results = process_all_images(
-    input_dir="bmsp/files",
-    output_base_dir="bmsp"
-)
-```
+**Resource Considerations**
+- Video rendering requires adequate disk space
+- Parallel processing scales with available CPU cores
+- Network bandwidth for API communication
 
-## Troubleshooting
+## Error Handling and Resilience
 
-### "GEMINI_API_KEY environment variable not set"
-Make sure you've set your API key as an environment variable or in a `.env` file.
+**JSON Parsing**
+- Multiple parsing strategies for malformed responses
+- Markdown code block removal
+- Fallback to text extraction from nested structures
 
-### No images generated
-Some notes may not contain diagrams. The system will still create markdown documentation.
+**Asset Generation Failures**
+- Graceful degradation when individual sections fail
+- Detailed logging for debugging
+- Continuation of pipeline despite partial failures
 
-### Image quality issues
-The AI tries to recreate diagrams based on descriptions. You can manually edit the generated images if needed.
+**API Error Management**
+- Exception catching at component level
+- Retry logic through asset caching mechanism
+- Clear error reporting for user intervention
 
-## Dependencies
+## Extension Points
 
-- `google-genai`: Google's Gemini API client for image/audio generation
-- `python-dotenv`: Environment variable management
-- `moviepy`: Video creation and editing
-- `pillow`: Image processing (required by moviepy)
+**Model Customization**
+- System prompts configurable per generation type
+- Schema definitions for structured output control
+- Temperature and thinking budget adjustments
 
-## License
+**Output Formats**
+- Pluggable video codecs and quality settings
+- Alternative audio formats beyond WAV
+- Custom image styles through prompt engineering
 
-This project is for educational and personal use.
-
-=======
-# NotionNarrator
-AI-powered tool that converts handwritten or typed notes from images into structured Markdown, complete with illustrations, narration, and videos.
->>>>>>> ed3e5b0d71c587065f00eb5c7976191a1b38e5fc
+**Processing Workflows**
+- Modular component design for pipeline modification
+- Hook points for pre/post-processing
+- Configurable parallel processing parameters
