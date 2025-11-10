@@ -8,9 +8,10 @@
        style="max-width: 820px; height: auto; display: block; margin-bottom: 15px;">
 
   <p style="font-size: 16px; line-height: 1.5;">
-    NotionNarrator is an AI-powered documentation generator that transforms 
-    handwritten or typed notes from images into structured educational 
-    content. The system operates in two distinct modes:
+    NotionNarrator is an AI-powered documentation generator that transforms handwritten or typed notes from images into structured educational content. The system operates in two distinct modes:
+
+1.  **Documentation Generation Mode**: Converts note images into formatted Markdown documents with AI-generated illustrations
+2.  **Video Generation Mode**: Creates educational video slideshows with AI-generated images and narration
   </p>
 
 </div>
