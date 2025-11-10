@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Notes Agent - Image to Markdown Documentation Generator
 
 This project automatically converts handwritten or typed notes from images into well-formatted Markdown documentation with AI-generated illustrations.
@@ -244,3 +245,7 @@ The AI tries to recreate diagrams based on descriptions. You can manually edit t
 
 This project is for educational and personal use.
 
+=======
+# NotionNarrator
+AI-powered tool that converts handwritten or typed notes from images into structured Markdown, complete with illustrations, narration, and videos.
+>>>>>>> ed3e5b0d71c587065f00eb5c7976191a1b38e5fc
