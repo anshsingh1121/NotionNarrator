@@ -16,6 +16,14 @@
 
 </div>
 
+
+## Technical Pipeline Flow
+
+![NotionNarrator Three-Stage Processing Pipeline](assets/img3.png)
+
+The NotionNarrator system implements a three-stage pipeline architecture that progressively transforms raw note images into polished educational video content. Each stage operates independently with well-defined inputs and outputs, enabling modular processing and parallel execution where applicable.
+
+
 ## Architecture Overview
 
 [![Watch the architecture explanation video](assets/img2.png)](https://www.youtube.com/watch?v=5aftMJ3UpKo&list=PLTkDyGbgSTQpe0X5DKmxNjy7mdX78kTo4)
